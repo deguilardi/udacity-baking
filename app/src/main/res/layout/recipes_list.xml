@@ -2,12 +2,12 @@
 <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/recipe_list"
-    android:name="guilardi.com.baking.RecipeListFragment"
+    android:id="@+id/recipes_list"
+    android:name="com.guilardi.baking.RecipeListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context="guilardi.com.baking.RecipeListActivity"
-    tools:listitem="@layout/recipe_list_content" />
+    tools:context="com.guilardi.baking.activities.RecipesListActivity"
+    tools:listitem="@layout/recipes_list_item" />

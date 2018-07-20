@@ -1,4 +1,4 @@
-package guilardi.com.baking;
+package com.guilardi.baking;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

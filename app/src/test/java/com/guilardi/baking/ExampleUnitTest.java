@@ -1,4 +1,4 @@
-package guilardi.com.baking;
+package com.guilardi.baking;
 
 import org.junit.Test;
 
