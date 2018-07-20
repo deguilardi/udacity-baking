@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import guilardi.com.baking.dummy.DummyContent;
 
 import java.util.List;
@@ -35,17 +39,21 @@ public class RecipeListActivity extends AppCompatActivity {
      */
     private boolean mTwoPane;
 
+    @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.fab) FloatingActionButton mFab;
+    @BindView(R.id.recipe_detail_container) @Nullable NestedScrollView mRecipeDetailContainer;
+    @BindView(R.id.recipe_list) @Nullable RecyclerView mRecipeList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_list);
+        ButterKnife.bind(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
+        setSupportActionBar(mToolbar);
+        mToolbar.setTitle(getTitle());
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -53,7 +61,7 @@ public class RecipeListActivity extends AppCompatActivity {
             }
         });
 
-        if (findViewById(R.id.recipe_detail_container) != null) {
+        if (mRecipeDetailContainer != null) {
             // The detail container view will be present only in the
             // large-screen layouts (res/values-w900dp).
             // If this view is present, then the
@@ -61,9 +69,8 @@ public class RecipeListActivity extends AppCompatActivity {
             mTwoPane = true;
         }
 
-        View recyclerView = findViewById(R.id.recipe_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        assert mRecipeList != null;
+        setupRecyclerView(mRecipeList);
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -128,13 +135,12 @@ public class RecipeListActivity extends AppCompatActivity {
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            final TextView mIdView;
-            final TextView mContentView;
+            @BindView(R.id.id_text) TextView mIdView;
+            @BindView(R.id.content) TextView mContentView;
 
             ViewHolder(View view) {
                 super(view);
-                mIdView = (TextView) view.findViewById(R.id.id_text);
-                mContentView = (TextView) view.findViewById(R.id.content);
+                ButterKnife.bind(this, view);
             }
         }
     }

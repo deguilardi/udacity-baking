@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import guilardi.com.baking.dummy.DummyContent;
 
 /**
@@ -28,6 +30,8 @@ public class RecipeDetailFragment extends Fragment {
      * The dummy content this fragment is presenting.
      */
     private DummyContent.DummyItem mItem;
+
+    @BindView(R.id.recipe_detail) TextView mDetail;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -58,10 +62,11 @@ public class RecipeDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.recipe_detail, container, false);
+        ButterKnife.bind(this, rootView);
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.recipe_detail)).setText(mItem.details);
+            mDetail.setText(mItem.details);
         }
 
         return rootView;
