@@ -1,6 +1,7 @@
 package com.guilardi.baking.activities;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import com.guilardi.baking.R;
 import com.guilardi.baking.StepDetailFragment;
 import com.guilardi.baking.data.Recipe;
+import com.guilardi.baking.utilities.Helper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,9 +21,11 @@ public class StepDetailActivity extends AppCompatActivity {
 
     public static final String ARG_RECIPE = "recipe";
     public static final String ARG_STEP_POSITION = "position";
+    public static final String KEY_LAST_ORIENTATION = "lastOrientation";
 
     private Recipe mRecipe;
     private int mStepPosition;
+    private int lastOrientation;
 
     @BindView(R.id.detail_toolbar) Toolbar mToolbar;
 
@@ -69,6 +73,16 @@ public class StepDetailActivity extends AppCompatActivity {
                     .add(R.id.recipe_detail_container, fragment)
                     .commit();
         }
+
+        if (savedInstanceState == null) {
+            lastOrientation = getResources().getConfiguration().orientation;
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        checkOrientationChanged();
     }
 
     @Override
@@ -99,5 +113,31 @@ public class StepDetailActivity extends AppCompatActivity {
 
     public int getStepPosition(){
         return mStepPosition;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        lastOrientation = savedInstanceState.getInt(KEY_LAST_ORIENTATION);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_LAST_ORIENTATION, lastOrientation);
+    }
+
+    private void checkOrientationChanged() {
+        int currentOrientation = getResources().getConfiguration().orientation;
+        if (currentOrientation != lastOrientation) {
+            onScreenOrientationChanged(currentOrientation);
+            lastOrientation = currentOrientation;
+        }
+    }
+
+    public void onScreenOrientationChanged(int currentOrientation) {
+        if(currentOrientation == Configuration.ORIENTATION_LANDSCAPE){
+            Helper.gotoRecipeStep(this, mRecipe, mStepPosition);
+        }
     }
 }

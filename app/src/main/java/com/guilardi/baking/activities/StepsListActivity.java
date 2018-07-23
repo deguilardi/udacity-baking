@@ -1,15 +1,14 @@
 package com.guilardi.baking.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,11 +16,11 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import com.guilardi.baking.StepDetailFragment;
 import com.guilardi.baking.custom.NonScrollListView;
 import com.guilardi.baking.data.Recipe;
 
 import com.guilardi.baking.R;
+import com.guilardi.baking.utilities.Helper;
 
 import java.util.List;
 
@@ -30,11 +29,10 @@ public class StepsListActivity extends AppCompatActivity
 
     public static final String ARG_RECIPE = "recipe";
 
-    private boolean mTwoPane;
     private Recipe mRecipe;
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
-    @BindView(R.id.step_detail_container) @Nullable NestedScrollView mStepDetailContainer;
+    @BindView(R.id.step_detail_container) @Nullable FrameLayout mStepDetailContainer;
     @BindView(R.id.steps_list) NonScrollListView mStepsList;
     @BindView(R.id.ingredients) TextView mIngredients;
 
@@ -59,14 +57,6 @@ public class StepsListActivity extends AppCompatActivity
         }
         else{
             Toast.makeText(this, "An error has occurred. Pleas try again later", Toast.LENGTH_LONG).show();
-        }
-
-        if (mStepDetailContainer != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
         }
 
         setupRecyclerView();
@@ -100,9 +90,6 @@ public class StepsListActivity extends AppCompatActivity
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent detailsActivityIntent = new Intent(StepsListActivity.this, StepDetailActivity.class);
-        detailsActivityIntent.putExtra(StepDetailActivity.ARG_RECIPE, mRecipe);
-        detailsActivityIntent.putExtra(StepDetailActivity.ARG_STEP_POSITION, position);
-        startActivity(detailsActivityIntent);
+        Helper.gotoRecipeStep(this, mRecipe, position);
     }
 }

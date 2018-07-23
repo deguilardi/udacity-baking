@@ -1,31 +1,18 @@
 package com.guilardi.baking;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
 import com.guilardi.baking.activities.StepDetailActivity;
+import com.guilardi.baking.utilities.ExoPlayerVideoHandler;
+import com.guilardi.baking.utilities.Helper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,14 +50,6 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         View rootView = inflater.inflate(R.layout.recipe_detail, container, false);
         ButterKnife.bind(this, rootView);
 
-        // get the recipe
-        Bundle b = mContext.getIntent().getExtras();
-        if(b != null){
-        }
-        else{
-            Toast.makeText(mContext, "An error has occurred. Pleas try again later", Toast.LENGTH_LONG).show();
-        }
-
         // buttons on click actions
         mBtnPrevious.setOnClickListener(this);
         mBtnNext.setOnClickListener(this);
@@ -99,28 +78,9 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
             mVideoPlayer.setVisibility(View.GONE);
             return;
         }
-
-        // 1. Create a default TrackSelector
-        Handler mainHandler = new Handler();
-        DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
-        DefaultTrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-
-        // 2. Create the player
-        Context context = getContext();
-        SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(context, trackSelector);
-
-        // prepare player with the video
-        Uri videoURI = Uri.parse(videoUrl);
-        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(mContext,
-                Util.getUserAgent(mContext, mContext.getString(R.string.app_name)), bandwidthMeter);
-        MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(videoURI);
-        player.prepare(videoSource);
-        player.setPlayWhenReady(true);
-
-        // Bind the player to the view.
-        mVideoPlayer.setPlayer(player);
+        else{
+            ExoPlayerVideoHandler.getInstance().prepareExoPlayerForUrl(mContext, videoUrl, mVideoPlayer);
+        }
     }
 
     @Override
@@ -130,17 +90,14 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
             case R.id.btn_previous:
             case R.id.btn_next:
                 int position = (callerID == R.id.btn_previous) ? mContext.getStepPosition() - 1 : mContext.getStepPosition() + 1;
-                Intent detailsActivityIntent = new Intent(mContext, StepDetailActivity.class);
-                detailsActivityIntent.putExtra(StepDetailActivity.ARG_RECIPE, mContext.getRecipe());
-                detailsActivityIntent.putExtra(StepDetailActivity.ARG_STEP_POSITION, position);
-                startActivity(detailsActivityIntent);
+                Helper.gotoRecipeStep(mContext, mContext.getRecipe(), position);
                 break;
         }
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mVideoPlayer.getPlayer().stop();
+    public void onDestroyView() {
+        super.onDestroyView();
+        ExoPlayerVideoHandler.getInstance().releaseVideoPlayer();
     }
 }
