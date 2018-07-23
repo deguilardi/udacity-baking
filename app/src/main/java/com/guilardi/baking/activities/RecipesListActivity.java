@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,10 +35,7 @@ public class RecipesListActivity extends AppCompatActivity
 
     private RecipesAdapter mRecipesAdapter;
     private int mPosition = RecyclerView.NO_POSITION;
-    private String mShowBy;
     private boolean mHasSelection;
-
-    private static String SAVED_SCROLL_POSITION = "savedScrollPosition";
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.loading_indicator) ProgressBar mLoadingIndicator;
@@ -53,7 +48,6 @@ public class RecipesListActivity extends AppCompatActivity
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
         mToolbar.setTitle(getTitle());
-        PreferenceManager.setDefaultValues(this, R.xml.settings, false);
 
         assert mRecyclerView != null;
         setupRecyclerView(mRecyclerView);
@@ -92,15 +86,6 @@ public class RecipesListActivity extends AppCompatActivity
                 }
                 if (recipes != null && recipes.size() != 0) {
                     showRecipesDataView();
-
-                    // save the returned value to the database
-//                    ContentValues[] contentValues = movies.getContentValues();
-//                    if (contentValues != null && contentValues.length != 0) {
-//                        ContentResolver contentResolver = context.getContentResolver();
-//                        contentResolver.delete(Movie.MovieEntry.CONTENT_URI,
-//                                Movie.MovieEntry.COLUMN_IS_FAVORITE + "=?", new String[]{"false"});
-//                        contentResolver.bulkInsert(Movie.MovieEntry.CONTENT_URI, contentValues);
-//                    }
                 }
             }
 
@@ -113,35 +98,8 @@ public class RecipesListActivity extends AppCompatActivity
                 Toast.makeText(context, "Something went wrong, please check your internet connection and try again!", Toast.LENGTH_LONG).show();
             }
         };
-
-//        if(mShowBy.equals("favorite")){
-//            ContentResolver contentResolver = context.getContentResolver();
-//            Cursor cursor = contentResolver.query(Movie.MovieEntry.CONTENT_URI,
-//                    new String[]{Movie.MovieEntry.COLUMN_ID,
-//                            Movie.MovieEntry.COLUMN_TITLE,
-//                            Movie.MovieEntry.COLUMN_POSTER_PATH,
-//                            Movie.MovieEntry.COLUMN_VOTE_AVARAGE,
-//                            Movie.MovieEntry.COLUMN_OVERVIEW,
-//                            Movie.MovieEntry.COLUMN_RELEASE_DATE,
-//                            Movie.MovieEntry.COLUMN_IS_FAVORITE},
-//                    Movie.MovieEntry.COLUMN_IS_FAVORITE+"=?",
-//                    new String[]{"1"},
-//                    null);
-//
-//            int count = 0;
-//            if(cursor != null){
-//                count =  cursor.getCount();
-//                mMoviesAdapter.swapData(cursor);
-//                cursor.close();
-//            }
-//            if(count == 0){
-//                Toast.makeText(this, "There is no favorite recipe", Toast.LENGTH_LONG).show();
-//            }
-//        }
-//        else {
-            NetworkUtils.getInstance().loadRecipes(callback);
-            showLoading();
-//        }
+        NetworkUtils.getInstance().loadRecipes(callback);
+        showLoading();
     }
 
     /**
@@ -182,7 +140,7 @@ public class RecipesListActivity extends AppCompatActivity
         mHasSelection = true;
 
         Intent detailsActivityIntent = new Intent(RecipesListActivity.this, StepsListActivity.class);
-        detailsActivityIntent.putExtra(StepsListActivity.ARG_ITEM, mRecipesAdapter.getData().get(position));
+        detailsActivityIntent.putExtra(StepsListActivity.ARG_RECIPE, mRecipesAdapter.getData().get(position));
         startActivity(detailsActivityIntent);
     }
 

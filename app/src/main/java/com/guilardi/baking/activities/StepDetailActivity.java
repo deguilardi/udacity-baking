@@ -2,44 +2,50 @@ package com.guilardi.baking.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.guilardi.baking.R;
 import com.guilardi.baking.StepDetailFragment;
+import com.guilardi.baking.data.Recipe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class StepDetailActivity extends AppCompatActivity {
 
+    public static final String ARG_RECIPE = "recipe";
+    public static final String ARG_STEP_POSITION = "position";
+
+    private Recipe mRecipe;
+    private int mStepPosition;
+
     @BindView(R.id.detail_toolbar) Toolbar mToolbar;
-    @BindView(R.id.fab) FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipe_detail);
+        setContentView(R.layout.activity_step_detail);
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
-
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        // get the recipe
+        Bundle b = this.getIntent().getExtras();
+        if(b != null){
+            mRecipe = (Recipe) b.get(ARG_RECIPE);
+            mStepPosition = (int) b.get(ARG_STEP_POSITION);
+        }
+        else{
+            Toast.makeText(this, "An error has occurred. Pleas try again later", Toast.LENGTH_LONG).show();
         }
 
         // savedInstanceState is non-null when there is fragment state
@@ -55,8 +61,8 @@ public class StepDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(StepDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(StepDetailFragment.ARG_ITEM_ID));
+            arguments.putString(ARG_RECIPE, getIntent().getStringExtra(ARG_RECIPE));
+            arguments.putString(ARG_STEP_POSITION, getIntent().getStringExtra(ARG_STEP_POSITION));
             StepDetailFragment fragment = new StepDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -68,16 +74,30 @@ public class StepDetailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
-            navigateUpTo(new Intent(this, RecipesListActivity.class));
+        if (id == android.R.id.home){
+            Intent stepsActivityIntent = new Intent(StepDetailActivity.this, StepsListActivity.class);
+            stepsActivityIntent.putExtra(StepsListActivity.ARG_RECIPE, mRecipe);
+            startActivity(stepsActivityIntent);
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void setTitle(CharSequence title){
+        super.setTitle(title);
+        mToolbar.setTitle(title);
+    }
+
+    public Recipe getRecipe(){
+        return mRecipe;
+    }
+
+    public Recipe.Step getStep(){
+        return mRecipe.getSteps().get(mStepPosition);
+    }
+
+    public int getStepPosition(){
+        return mStepPosition;
     }
 }

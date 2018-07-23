@@ -24,13 +24,9 @@ public class Recipe implements Parcelable {
             id = in.readInt();
         }
         name = in.readString();
-        ingredients = in.createTypedArrayList(CREATOR_INGREDIENTS);
-        steps = in.createTypedArrayList(CREATOR_STEPS);
-        if (in.readByte() == 0) {
-            servings = null;
-        } else {
-            servings = in.readInt();
-        }
+        ingredients = in.createTypedArrayList(Ingredient.CREATOR);
+        steps = in.createTypedArrayList(Step.CREATOR);
+        servings = in.readInt();
         image = in.readString();
     }
 
@@ -43,30 +39,6 @@ public class Recipe implements Parcelable {
         @Override
         public Recipe[] newArray(int size) {
             return new Recipe[size];
-        }
-    };
-
-    public final Creator<Ingredient> CREATOR_INGREDIENTS = new Creator<Ingredient>() {
-        @Override
-        public Ingredient createFromParcel(Parcel in) {
-            return new Ingredient(in);
-        }
-
-        @Override
-        public Ingredient[] newArray(int size) {
-            return new Ingredient[size];
-        }
-    };
-
-    public final Creator<Step> CREATOR_STEPS = new Creator<Step>() {
-        @Override
-        public Step createFromParcel(Parcel in) {
-            return new Step(in);
-        }
-
-        @Override
-        public Step[] newArray(int size) {
-            return new Step[size];
         }
     };
 
@@ -138,7 +110,7 @@ public class Recipe implements Parcelable {
         this.image = image;
     }
 
-    public class Ingredient implements Parcelable{
+    public static class Ingredient implements Parcelable{
         private Float quantity;
         private String measure;
         private String ingredient;
@@ -153,7 +125,17 @@ public class Recipe implements Parcelable {
             ingredient = in.readString();
         }
 
-        public final Creator<Ingredient> CREATOR = CREATOR_INGREDIENTS;
+        public static final Creator<Ingredient> CREATOR = new Creator<Ingredient>() {
+            @Override
+            public Ingredient createFromParcel(Parcel in) {
+                return new Ingredient(in);
+            }
+
+            @Override
+            public Ingredient[] newArray(int size) {
+                return new Ingredient[size];
+            }
+        };
 
         public Float getQuantity() {
             return quantity;
@@ -201,7 +183,7 @@ public class Recipe implements Parcelable {
         }
     }
 
-    public class Step implements Parcelable{
+    public static class Step implements Parcelable{
         private Integer id;
         private String shortDescription;
         private String description;
@@ -220,7 +202,17 @@ public class Recipe implements Parcelable {
             thumbnailURL = in.readString();
         }
 
-        public final Creator<Step> CREATOR = CREATOR_STEPS;
+        public static final Creator<Step> CREATOR = new Creator<Step>() {
+            @Override
+            public Step createFromParcel(Parcel in) {
+                return new Step(in);
+            }
+
+            @Override
+            public Step[] newArray(int size) {
+                return new Step[size];
+            }
+        };
 
         public Integer getId() {
             return id;

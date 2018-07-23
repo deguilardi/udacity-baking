@@ -1,9 +1,47 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/recipe_detail"
-    style="?android:attr/textAppearanceLarge"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
-    android:textIsSelectable="true"
-    tools:context="com.guilardi.baking.RecipeDetailFragment" />
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context="com.guilardi.baking.StepDetailFragment" >
+
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/videoPlayer"
+        android:minHeight="220dp"
+        app:resize_mode="fit"
+        app:auto_show="true"/>
+
+    <TextView
+        style="?android:attr/textAppearanceLarge"
+        android:id="@+id/instructions"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:textIsSelectable="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_previous"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="previous" />
+
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:text="next" />
+
+    </LinearLayout>
+
+</LinearLayout>
