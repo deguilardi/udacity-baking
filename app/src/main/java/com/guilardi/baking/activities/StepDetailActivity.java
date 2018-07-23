@@ -52,28 +52,6 @@ public class StepDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "An error has occurred. Pleas try again later", Toast.LENGTH_LONG).show();
         }
 
-        // savedInstanceState is non-null when there is fragment state
-        // saved from previous configurations of this activity
-        // (e.g. when rotating the screen from portrait to landscape).
-        // In this case, the fragment will automatically be re-added
-        // to its container so we don't need to manually add it.
-        // For more information, see the Fragments API guide at:
-        //
-        // http://developer.android.com/guide/components/fragments.html
-        //
-        if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
-            Bundle arguments = new Bundle();
-            arguments.putString(ARG_RECIPE, getIntent().getStringExtra(ARG_RECIPE));
-            arguments.putString(ARG_STEP_POSITION, getIntent().getStringExtra(ARG_STEP_POSITION));
-            StepDetailFragment fragment = new StepDetailFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.recipe_detail_container, fragment)
-                    .commit();
-        }
-
         if (savedInstanceState == null) {
             lastOrientation = getResources().getConfiguration().orientation;
         }
@@ -101,18 +79,6 @@ public class StepDetailActivity extends AppCompatActivity {
     public void setTitle(CharSequence title){
         super.setTitle(title);
         mToolbar.setTitle(title);
-    }
-
-    public Recipe getRecipe(){
-        return mRecipe;
-    }
-
-    public Recipe.Step getStep(){
-        return mRecipe.getSteps().get(mStepPosition);
-    }
-
-    public int getStepPosition(){
-        return mStepPosition;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.guilardi.baking;
 
-import android.content.Intent;
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,9 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.exoplayer2.ui.PlayerView;
-import com.guilardi.baking.activities.StepDetailActivity;
+import com.guilardi.baking.data.Recipe;
 import com.guilardi.baking.utilities.ExoPlayerVideoHandler;
 import com.guilardi.baking.utilities.Helper;
 
@@ -25,7 +27,13 @@ import butterknife.ButterKnife;
  */
 public class StepDetailFragment extends Fragment implements View.OnClickListener {
 
-    private StepDetailActivity mContext;
+    public static final String ARG_RECIPE = "recipe";
+    public static final String ARG_STEP_POSITION = "position";
+
+    private Activity context;
+    private Recipe mRecipe;
+    private Recipe.Step mStep;
+    private int mStepPosition;
 
     @BindView(R.id.instructions) TextView mInstructions;
     @BindView(R.id.videoPlayer) PlayerView mVideoPlayer;
@@ -42,7 +50,7 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext = (StepDetailActivity) getActivity();
+        context = getActivity();
     }
 
     @Override
@@ -54,32 +62,48 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         mBtnPrevious.setOnClickListener(this);
         mBtnNext.setOnClickListener(this);
 
+        // get the recipe
+        Bundle b = context.getIntent().getExtras();
+        if(b != null){
+            mRecipe = (Recipe) b.get(ARG_RECIPE);
+            if(b.get(ARG_STEP_POSITION) != null) {
+                mStepPosition = (int) b.get(ARG_STEP_POSITION);
+            }
+            else{
+                mStepPosition = getArguments().getInt(ARG_STEP_POSITION);
+            }
+            mStep = mRecipe.getSteps().get(mStepPosition);
+        }
+        else{
+            Toast.makeText(context, "An error has occurred. Pleas try again later", Toast.LENGTH_LONG).show();
+        }
+
         bindValues();
         createPlayer();
         return rootView;
     }
 
     private void bindValues(){
-        mContext.setTitle(mContext.getStep().getShortDescription());
-        mInstructions.setText(mContext.getStep().getDescription());
+        context.setTitle(mStep.getShortDescription());
+        mInstructions.setText(mStep.getDescription());
 
-        if(mContext.getStepPosition() + 1 == 1){
+        if(mStepPosition + 1 == 1){
             mBtnPrevious.setEnabled(false);
         }
-        else if(mContext.getStepPosition() + 1 == mContext.getRecipe().getSteps().size()){
+        else if(mStepPosition + 1 == mRecipe.getSteps().size()){
             mBtnNext.setEnabled(false);
         }
     }
 
     private void createPlayer(){
-        String videoUrl = mContext.getStep().getVideoURL();
+        String videoUrl = mStep.getVideoURL();
 
         if(videoUrl.equals("")){
             mVideoPlayer.setVisibility(View.GONE);
             return;
         }
         else{
-            ExoPlayerVideoHandler.getInstance().prepareExoPlayerForUrl(mContext, videoUrl, mVideoPlayer);
+            ExoPlayerVideoHandler.getInstance().prepareExoPlayerForUrl(context, videoUrl, mVideoPlayer);
         }
     }
 
@@ -89,8 +113,8 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         switch (callerID){
             case R.id.btn_previous:
             case R.id.btn_next:
-                int position = (callerID == R.id.btn_previous) ? mContext.getStepPosition() - 1 : mContext.getStepPosition() + 1;
-                Helper.gotoRecipeStep(mContext, mContext.getRecipe(), position);
+                int position = (callerID == R.id.btn_previous) ? mStepPosition - 1 : mStepPosition + 1;
+                Helper.gotoRecipeStep(context, mRecipe, position);
                 break;
         }
     }

@@ -16,6 +16,7 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import com.guilardi.baking.StepDetailFragment;
 import com.guilardi.baking.custom.NonScrollListView;
 import com.guilardi.baking.data.Recipe;
 
@@ -91,5 +92,6 @@ public class StepsListActivity extends AppCompatActivity
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Helper.gotoRecipeStep(this, mRecipe, position);
+        getSupportFragmentManager();
     }
 }
