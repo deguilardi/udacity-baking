@@ -1,5 +1,6 @@
 package com.guilardi.baking.activities;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -33,7 +34,6 @@ public class StepsListActivity extends AppCompatActivity
     private Recipe mRecipe;
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
-    @BindView(R.id.step_detail_container) @Nullable FrameLayout mStepDetailContainer;
     @BindView(R.id.steps_list) NonScrollListView mStepsList;
     @BindView(R.id.ingredients) TextView mIngredients;
 
@@ -43,6 +43,11 @@ public class StepsListActivity extends AppCompatActivity
         setContentView(R.layout.activity_steps_list);
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
+
+        // force landscape on tablets
+        if(Helper.isTablet(this)){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
@@ -54,7 +59,7 @@ public class StepsListActivity extends AppCompatActivity
         Bundle b = getIntent().getExtras();
         if(b != null){
             mRecipe = (Recipe) b.get(ARG_RECIPE);
-            mToolbar.setTitle(mRecipe.getName());
+             mToolbar.setTitle(mRecipe.getName());
         }
         else{
             Toast.makeText(this, "An error has occurred. Pleas try again later", Toast.LENGTH_LONG).show();
@@ -92,6 +97,5 @@ public class StepsListActivity extends AppCompatActivity
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Helper.gotoRecipeStep(this, mRecipe, position);
-        getSupportFragmentManager();
     }
 }

@@ -53,6 +53,18 @@ public class StepDetailActivity extends AppCompatActivity {
         }
 
         if (savedInstanceState == null) {
+
+            // Create the detail fragment and add it to the activity
+            // using a fragment transaction.
+            Bundle arguments = new Bundle();
+            arguments.putString(ARG_RECIPE, getIntent().getStringExtra(ARG_RECIPE));
+            StepDetailFragment fragment = new StepDetailFragment();
+            fragment.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.recipe_detail_container, fragment)
+                    .commit();
+
+            // save initial orientation
             lastOrientation = getResources().getConfiguration().orientation;
         }
     }
@@ -102,7 +114,7 @@ public class StepDetailActivity extends AppCompatActivity {
     }
 
     public void onScreenOrientationChanged(int currentOrientation) {
-        if(currentOrientation == Configuration.ORIENTATION_LANDSCAPE){
+        if(currentOrientation == Configuration.ORIENTATION_LANDSCAPE && Helper.isPhone(this)){
             Helper.gotoRecipeStep(this, mRecipe, mStepPosition);
         }
     }

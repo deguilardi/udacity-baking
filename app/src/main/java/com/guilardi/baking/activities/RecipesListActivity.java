@@ -2,6 +2,7 @@ package com.guilardi.baking.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -48,6 +49,11 @@ public class RecipesListActivity extends AppCompatActivity
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
         mToolbar.setTitle(getTitle());
+
+        // force landscape on tablets
+        if(Helper.isTablet(this)){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
 
         assert mRecyclerView != null;
         setupRecyclerView(mRecyclerView);

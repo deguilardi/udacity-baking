@@ -1,7 +1,6 @@
 package com.guilardi.baking;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -66,11 +65,9 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         Bundle b = context.getIntent().getExtras();
         if(b != null){
             mRecipe = (Recipe) b.get(ARG_RECIPE);
-            if(b.get(ARG_STEP_POSITION) != null) {
+            mStepPosition = getArguments().getInt(ARG_STEP_POSITION, -1);
+            if(mStepPosition == -1) {
                 mStepPosition = (int) b.get(ARG_STEP_POSITION);
-            }
-            else{
-                mStepPosition = getArguments().getInt(ARG_STEP_POSITION);
             }
             mStep = mRecipe.getSteps().get(mStepPosition);
         }
