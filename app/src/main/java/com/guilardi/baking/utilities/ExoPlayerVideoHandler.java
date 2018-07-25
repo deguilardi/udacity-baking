@@ -34,7 +34,6 @@ public class ExoPlayerVideoHandler {
     }
     private SimpleExoPlayer player;
     private String url;
-    private boolean isPlayerPlaying;
 
     private ExoPlayerVideoHandler(){}
 
@@ -75,18 +74,5 @@ public class ExoPlayerVideoHandler {
             player.release();
         }
         player = null;
-    }
-
-    public void goToBackground(){
-        if(player != null){
-            isPlayerPlaying = isPlayerPlaying || player.getPlayWhenReady();
-            player.setPlayWhenReady(false);
-        }
-    }
-
-    public void goToForeground(){
-        if(player != null){
-            player.setPlayWhenReady(isPlayerPlaying || player.getPlayWhenReady());
-        }
     }
 }

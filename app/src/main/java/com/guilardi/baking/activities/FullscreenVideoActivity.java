@@ -2,12 +2,12 @@ package com.guilardi.baking.activities;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.guilardi.baking.R;
+import com.guilardi.baking.custom.MyActivity;
 import com.guilardi.baking.data.Recipe;
 import com.guilardi.baking.utilities.ExoPlayerVideoHandler;
 import com.guilardi.baking.utilities.Helper;
@@ -19,9 +19,8 @@ import butterknife.ButterKnife;
  * Created by deguilardi on 7/23/18.
  */
 
-public class FullscreenVideoActivity extends AppCompatActivity {
+public class FullscreenVideoActivity extends MyActivity implements MyActivity.OnOrientationChangedListener {
 
-    public static final String KEY_LAST_ORIENTATION = "lastOrientation";
     public static final String ARG_URL = "url";
     public static final String ARG_RECIPE = "recipe";
     public static final String ARG_STEP_POSITION = "position";
@@ -29,7 +28,6 @@ public class FullscreenVideoActivity extends AppCompatActivity {
     private Recipe mRecipe;
     private int mStepPosition;
     private String mUrl;
-    private int lastOrientation;
 
     @BindView(R.id.videoPlayer) PlayerView mVideoPlayer;
 
@@ -38,6 +36,7 @@ public class FullscreenVideoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen_video);
         ButterKnife.bind(this);
+        setOrientationChangedListener(this);
 
         // get the url
         Bundle b = getIntent().getExtras();
@@ -49,36 +48,26 @@ public class FullscreenVideoActivity extends AppCompatActivity {
         else{
             Toast.makeText(this, "An error has occurred. Pleas try again later", Toast.LENGTH_LONG).show();
         }
-
-        if (savedInstanceState == null) {
-            lastOrientation = getResources().getConfiguration().orientation;
-        }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        checkOrientationChanged();
     }
 
     @Override
     protected void onResume(){
         super.onResume();
         ExoPlayerVideoHandler.getInstance().prepareExoPlayerForUrl(this, mUrl, mVideoPlayer);
-        ExoPlayerVideoHandler.getInstance().goToForeground();
+//        ExoPlayerVideoHandler.getInstance().goToForeground();
     }
 
-    @Override
-    public void onBackPressed(){
-        super.onBackPressed();
-        ExoPlayerVideoHandler.getInstance().goToBackground();
-    }
-
-    @Override
-    protected void onPause(){
-        super.onPause();
-        ExoPlayerVideoHandler.getInstance().goToBackground();
-    }
+//    @Override
+//    public void onBackPressed(){
+//        super.onBackPressed();
+//        ExoPlayerVideoHandler.getInstance().goToBackground();
+//    }
+//
+//    @Override
+//    protected void onPause(){
+//        super.onPause();
+//        ExoPlayerVideoHandler.getInstance().goToBackground();
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -91,27 +80,8 @@ public class FullscreenVideoActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        lastOrientation = savedInstanceState.getInt(KEY_LAST_ORIENTATION);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(KEY_LAST_ORIENTATION, lastOrientation);
-    }
-
-    private void checkOrientationChanged() {
-        int currentOrientation = getResources().getConfiguration().orientation;
-        if (currentOrientation != lastOrientation) {
-            onScreenOrientationChanged(currentOrientation);
-            lastOrientation = currentOrientation;
-        }
-    }
-
-    public void onScreenOrientationChanged(int currentOrientation) {
-        if(currentOrientation == Configuration.ORIENTATION_PORTRAIT){
+    public void onOrientationChanged(int newOrientation) {
+        if(newOrientation == Configuration.ORIENTATION_PORTRAIT){
             Helper.gotoRecipeStep(this, mRecipe, mStepPosition);
         }
     }

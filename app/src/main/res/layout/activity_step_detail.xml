@@ -29,7 +29,7 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:title="XXX" />
+                app:title="@string/dummy" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
 

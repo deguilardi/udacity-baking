@@ -7,6 +7,8 @@ import android.widget.ListView;
 
 /**
  * Created by deguilardi on 7/20/18.
+ *
+ * this will generate a ListView with no scroll
  */
 
 public class NonScrollListView extends ListView {

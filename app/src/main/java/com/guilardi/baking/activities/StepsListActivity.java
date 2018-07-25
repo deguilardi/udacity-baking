@@ -2,22 +2,18 @@ package com.guilardi.baking.activities;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import com.guilardi.baking.StepDetailFragment;
+import com.guilardi.baking.custom.MyActivity;
 import com.guilardi.baking.custom.NonScrollListView;
 import com.guilardi.baking.data.Recipe;
 
@@ -26,12 +22,7 @@ import com.guilardi.baking.utilities.Helper;
 
 import java.util.List;
 
-public class StepsListActivity extends AppCompatActivity
-        implements AdapterView.OnItemClickListener {
-
-    public static final String ARG_RECIPE = "recipe";
-
-    private Recipe mRecipe;
+public class StepsListActivity extends MyActivity implements AdapterView.OnItemClickListener {
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.steps_list) NonScrollListView mStepsList;
@@ -55,23 +46,16 @@ public class StepsListActivity extends AppCompatActivity
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        // get the recipe
-        Bundle b = getIntent().getExtras();
-        if(b != null){
-            mRecipe = (Recipe) b.get(ARG_RECIPE);
-             mToolbar.setTitle(mRecipe.getName());
-        }
-        else{
-            Toast.makeText(this, "An error has occurred. Pleas try again later", Toast.LENGTH_LONG).show();
-        }
+        // set title
+        mToolbar.setTitle(getCurrentRecipe().getName());
 
         setupRecyclerView();
         bindValues();
     }
 
     private void setupRecyclerView() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
-        List<Recipe.Step> steps = mRecipe.getSteps();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        List<Recipe.Step> steps = getCurrentRecipe().getSteps();
         for(int i = 0; i< steps.size(); i++){
             adapter.add(steps.get(i).getShortDescription());
         }
@@ -80,15 +64,13 @@ public class StepsListActivity extends AppCompatActivity
     }
 
     private void bindValues(){
-        String ingredientsStr = "";
-        List<Recipe.Ingredient> ingredients = mRecipe.getIngredients();
+        StringBuilder ingredientsStr = new StringBuilder();
+        List<Recipe.Ingredient> ingredients = getCurrentRecipe().getIngredients();
         for(int i = 0; i < ingredients.size(); i++){
             Recipe.Ingredient ingredient = ingredients.get(i);
-            ingredientsStr += " - " + ingredient.getIngredient()
-                           + " : " + ingredient.getQuantityNormalized()
-                           + " " + ingredient.getMeasure() + "\r\n";
+            ingredientsStr.append(" - ").append(ingredient.getIngredient()).append(" : ").append(ingredient.getQuantityNormalized()).append(" ").append(ingredient.getMeasure()).append("\r\n");
         }
-        mIngredients.setText(ingredientsStr);
+        mIngredients.setText(ingredientsStr.toString());
     }
 
     /**
@@ -96,6 +78,6 @@ public class StepsListActivity extends AppCompatActivity
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Helper.gotoRecipeStep(this, mRecipe, position);
+        Helper.gotoRecipeStep(this, getCurrentRecipe(), position);
     }
 }

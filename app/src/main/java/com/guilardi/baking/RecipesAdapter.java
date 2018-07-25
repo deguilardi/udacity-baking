@@ -14,16 +14,17 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.guilardi.baking.data.Recipe;
-import com.guilardi.baking.utilities.Helper;
 import com.squareup.picasso.Picasso;
 
 /**
  * Created by deguilardi on 7/20/18.
+ *
+ * provide the adapter for recipe list
  */
 
 public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesAdapterViewHolder> {
 
-    Activity mContext;
+    private Activity mContext;
     private List<Recipe> mData;
     final private RecipesAdapterOnClickHandler mClickHandler;
 
@@ -46,14 +47,10 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesA
 
     @Override
     public void onBindViewHolder(@NonNull RecipesAdapterViewHolder recipesAdapterViewHolder, int position) {
-        int numColumns = Helper.isTablet(mContext) ? 3 : 1;
-
-        // parse te result
         Recipe recipe = mData.get(position);
         recipesAdapterViewHolder.mName.setText(recipe.getName());
         if(!recipe.getImage().equals("")) {
             Picasso.with(mContext).load(recipe.getImage())
-//                    .resize(sizeW, sizeH)
                     .centerCrop()
                     .placeholder(R.drawable.progress_animation)
                     .error(R.drawable.image_not_found)
@@ -71,11 +68,6 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesA
         mData = data;
         notifyDataSetChanged();
     }
-
-//    public void swapData(Cursor cursor){
-//        mData = new Movies(cursor);
-//        notifyDataSetChanged();
-//    }
 
     public List<Recipe> getData(){
         return mData;

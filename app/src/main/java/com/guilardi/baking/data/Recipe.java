@@ -7,6 +7,8 @@ import java.util.List;
 
 /**
  * Created by deguilardi on 7/19/18.
+ *
+ * POJO + parceable Recipe
  */
 
 public class Recipe implements Parcelable {

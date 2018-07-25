@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import com.guilardi.baking.RecipesAdapter;
+import com.guilardi.baking.custom.MyActivity;
 import com.guilardi.baking.data.Recipe;
 import com.guilardi.baking.utilities.Helper;
 import com.guilardi.baking.utilities.NetworkUtils;
@@ -31,8 +31,7 @@ import retrofit2.Response;
 
 import java.util.List;
 
-public class RecipesListActivity extends AppCompatActivity
-        implements RecipesAdapter.RecipesAdapterOnClickHandler {
+public class RecipesListActivity extends MyActivity implements RecipesAdapter.RecipesAdapterOnClickHandler {
 
     private RecipesAdapter mRecipesAdapter;
     private int mPosition = RecyclerView.NO_POSITION;
@@ -55,8 +54,7 @@ public class RecipesListActivity extends AppCompatActivity
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
 
-        assert mRecyclerView != null;
-        setupRecyclerView(mRecyclerView);
+        setupRecyclerView();
         loadRecipesData();
     }
 
@@ -66,7 +64,8 @@ public class RecipesListActivity extends AppCompatActivity
         mHasSelection = false;
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+    private void setupRecyclerView() {
+        assert mRecyclerView != null;
         int numColumns = Helper.isTablet(this) ? 3 : 1;
         GridLayoutManager layoutManager = new GridLayoutManager(this, numColumns);
         mRecyclerView.setLayoutManager(layoutManager);

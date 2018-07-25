@@ -12,14 +12,15 @@ import retrofit2.http.Path;
 
 /**
  * Created by deguilardi on 7/19/18.
+ *
+ * provide all network access
  */
 
 public final class NetworkUtils {
-    private static final String TAG = NetworkUtils.class.getSimpleName();
     private static final String BASE_URL = "https://d17h27t6h515a5.cloudfront.net/";
     private static final String PATH_RECIPES_LIST = "topher/2017/May/59121517_baking/baking.json";
 
-    protected static NetworkUtils instance;
+    private static NetworkUtils instance;
     private Service service;
 
     private NetworkUtils(){

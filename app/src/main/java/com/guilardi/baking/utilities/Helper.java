@@ -10,7 +10,7 @@ import com.guilardi.baking.R;
 import com.guilardi.baking.StepDetailFragment;
 import com.guilardi.baking.activities.FullscreenVideoActivity;
 import com.guilardi.baking.activities.StepDetailActivity;
-import com.guilardi.baking.activities.StepsListActivity;
+import com.guilardi.baking.custom.MyActivity;
 import com.guilardi.baking.data.Recipe;
 
 /**
@@ -46,8 +46,8 @@ public final class Helper {
         }
         else{
             Bundle arguments = new Bundle();
-            arguments.putParcelable(StepDetailFragment.ARG_RECIPE, recipe);
-            arguments.putInt(StepDetailFragment.ARG_STEP_POSITION, position);
+            arguments.putParcelable(MyActivity.ARG_RECIPE, recipe);
+            arguments.putInt(MyActivity.ARG_STEP_POSITION, position);
             StepDetailFragment fragment = new StepDetailFragment();
             fragment.setArguments(arguments);
             ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
