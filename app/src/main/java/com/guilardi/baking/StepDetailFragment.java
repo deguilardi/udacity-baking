@@ -3,10 +3,12 @@ package com.guilardi.baking;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.ui.PlayerView;
@@ -14,6 +16,7 @@ import com.guilardi.baking.custom.MyActivity;
 import com.guilardi.baking.data.Recipe;
 import com.guilardi.baking.utilities.ExoPlayerVideoHandler;
 import com.guilardi.baking.utilities.Helper;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +35,7 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
     @BindView(R.id.videoPlayer) PlayerView mVideoPlayer;
     @BindView(R.id.btn_previous) Button mBtnPrevious;
     @BindView(R.id.btn_next) Button mBtnNext;
+    @BindView(R.id.thumb_view) ImageView mThumb;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -44,6 +48,14 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         myActivity = (MyActivity) getActivity();
+
+        // the step is passed as an argument when this fragment is
+        // called within the same activity on horizontal tablets screens
+        Bundle b = getArguments();
+        if(b != null && b.get(MyActivity.ARG_STEP_POSITION) != null){
+            int currentStepPosition = b.getInt(MyActivity.ARG_STEP_POSITION, -1);
+            myActivity.setCurrentStepPosition(currentStepPosition);
+        }
     }
 
     @Override
@@ -63,11 +75,24 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
     private void bindValues(){
         Recipe currentRecipe = myActivity.getCurrentRecipe();
         Recipe.Step currentStep = myActivity.getCurrentStep();
-        int currentStepPosition = myActivity.getCurrentStepPosition();
 
         myActivity.setTitle(currentStep.getShortDescription());
         mInstructions.setText(currentStep.getDescription());
 
+        // thumbnail
+        if(!TextUtils.isEmpty(currentStep.getThumbnailURL())) {
+            Picasso.with(myActivity).load(currentStep.getThumbnailURL())
+                    .placeholder(R.drawable.progress_animation)
+                    .error(R.drawable.image_not_found)
+                    .into(mThumb);
+        }
+        else{
+            Picasso.with(myActivity).load(R.drawable.image_not_found)
+                    .into(mThumb);
+        }
+
+        // previous / next btns
+        int currentStepPosition = myActivity.getCurrentStepPosition();
         if(currentStepPosition + 1 == 1){
             mBtnPrevious.setEnabled(false);
         }
@@ -79,7 +104,7 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
     private void createPlayer(){
         String videoUrl = myActivity.getCurrentStep().getVideoURL();
 
-        if(videoUrl.equals("")){
+        if(TextUtils.isEmpty(videoUrl)){
             mVideoPlayer.setVisibility(View.GONE);
         }
         else{

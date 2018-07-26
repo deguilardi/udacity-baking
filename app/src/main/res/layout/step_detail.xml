@@ -24,7 +24,9 @@
         <ImageView
             android:id="@+id/thumb_view"
             android:layout_width="@dimen/thumb_width"
-            android:layout_height="@dimen/thumb_height" />
+            android:layout_height="@dimen/thumb_height"
+            android:paddingLeft="@dimen/text_margin"
+            android:paddingTop="@dimen/text_margin" />
 
         <TextView
             style="?android:attr/textAppearanceLarge"

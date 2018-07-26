@@ -3,7 +3,6 @@ package com.guilardi.baking.activities;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.guilardi.baking.R;
@@ -17,6 +16,8 @@ import butterknife.ButterKnife;
 
 /**
  * Created by deguilardi on 7/23/18.
+ *
+ * show the video on fullscreen when it's a phone and in horizontal orientation only
  */
 
 public class FullscreenVideoActivity extends MyActivity implements MyActivity.OnOrientationChangedListener {
@@ -40,34 +41,17 @@ public class FullscreenVideoActivity extends MyActivity implements MyActivity.On
 
         // get the url
         Bundle b = getIntent().getExtras();
-        if(b != null){
-            mUrl = (String) b.get(ARG_URL);
-            mRecipe = (Recipe) b.get(ARG_RECIPE);
-            mStepPosition = (int) b.get(ARG_STEP_POSITION);
-        }
-        else{
-            Toast.makeText(this, "An error has occurred. Pleas try again later", Toast.LENGTH_LONG).show();
-        }
+        assert b != null;
+        mUrl = (String) b.get(ARG_URL);
+        mRecipe = (Recipe) b.get(ARG_RECIPE);
+        mStepPosition = (int) b.get(ARG_STEP_POSITION);
     }
 
     @Override
     protected void onResume(){
         super.onResume();
         ExoPlayerVideoHandler.getInstance().prepareExoPlayerForUrl(this, mUrl, mVideoPlayer);
-//        ExoPlayerVideoHandler.getInstance().goToForeground();
     }
-
-//    @Override
-//    public void onBackPressed(){
-//        super.onBackPressed();
-//        ExoPlayerVideoHandler.getInstance().goToBackground();
-//    }
-//
-//    @Override
-//    protected void onPause(){
-//        super.onPause();
-//        ExoPlayerVideoHandler.getInstance().goToBackground();
-//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

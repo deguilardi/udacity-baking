@@ -46,6 +46,12 @@ public abstract class MyActivity extends AppCompatActivity {
         return mCurrentStepPosition;
     }
 
+    public void setCurrentStepPosition(int currentStepPosition){
+        mCurrentStepPosition = currentStepPosition;
+        Recipe.Step currentStep = mCurrentRecipe.getSteps().get(mCurrentStepPosition);
+        mCurrentStep = currentStep;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

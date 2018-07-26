@@ -3,6 +3,7 @@ package com.guilardi.baking.utilities;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.SurfaceView;
 
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -38,7 +39,7 @@ public class ExoPlayerVideoHandler {
     private ExoPlayerVideoHandler(){}
 
     public void prepareExoPlayerForUrl(Context context, String url, PlayerView exoPlayerView){
-        if(context != null && url != null && exoPlayerView != null && !url.equals("")){
+        if(context != null && !TextUtils.isEmpty(url) && exoPlayerView != null){
             context = context.getApplicationContext();
             Uri uri = Uri.parse(url);
             if(!url.equals(this.url) || player == null){
@@ -69,8 +70,8 @@ public class ExoPlayerVideoHandler {
     }
 
     public void releaseVideoPlayer(){
-        if(player != null)
-        {
+        if(player != null){
+            player.stop();
             player.release();
         }
         player = null;

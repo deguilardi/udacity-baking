@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 
 import com.guilardi.baking.R;
 import com.guilardi.baking.StepDetailFragment;
@@ -33,7 +34,7 @@ public final class Helper {
             Recipe.Step step = recipe.getSteps().get(position);
             Intent intent;
             if( context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
-                    || step.getVideoURL().equals("")) {
+                    || TextUtils.isEmpty(step.getVideoURL())) {
                 intent = new Intent(context, StepDetailActivity.class);
             }
             else{
@@ -46,7 +47,6 @@ public final class Helper {
         }
         else{
             Bundle arguments = new Bundle();
-            arguments.putParcelable(MyActivity.ARG_RECIPE, recipe);
             arguments.putInt(MyActivity.ARG_STEP_POSITION, position);
             StepDetailFragment fragment = new StepDetailFragment();
             fragment.setArguments(arguments);

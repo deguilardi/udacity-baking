@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +23,7 @@ import butterknife.ButterKnife;
 import com.guilardi.baking.RecipesAdapter;
 import com.guilardi.baking.custom.MyActivity;
 import com.guilardi.baking.data.Recipe;
+import com.guilardi.baking.utilities.ExoPlayerVideoHandler;
 import com.guilardi.baking.utilities.Helper;
 import com.guilardi.baking.utilities.NetworkUtils;
 
@@ -37,6 +40,7 @@ public class RecipesListActivity extends MyActivity implements RecipesAdapter.Re
     private int mPosition = RecyclerView.NO_POSITION;
     private boolean mHasSelection;
 
+    @BindView(R.id.main_content) CoordinatorLayout mMainContent;
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.loading_indicator) ProgressBar mLoadingIndicator;
     @BindView(R.id.recipes_list) RecyclerView mRecyclerView;
@@ -62,6 +66,7 @@ public class RecipesListActivity extends MyActivity implements RecipesAdapter.Re
     protected void onResume() {
         super.onResume();
         mHasSelection = false;
+        ExoPlayerVideoHandler.getInstance().releaseVideoPlayer();
     }
 
     private void setupRecyclerView() {
@@ -100,6 +105,15 @@ public class RecipesListActivity extends MyActivity implements RecipesAdapter.Re
             }
 
             private void showError(){
+                Snackbar snackbar = Snackbar
+                        .make(mMainContent, R.string.no_internet, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.try_again, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View snackbar2View) {
+                                loadRecipesData();
+                            }
+                        });
+                snackbar.show();
                 Toast.makeText(context, "Something went wrong, please check your internet connection and try again!", Toast.LENGTH_LONG).show();
             }
         };

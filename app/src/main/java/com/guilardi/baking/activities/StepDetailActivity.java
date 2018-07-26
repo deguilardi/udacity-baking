@@ -36,6 +36,7 @@ public class StepDetailActivity extends MyActivity implements MyActivity.OnOrien
         // set title
         mToolbar.setTitle(getCurrentStep().getShortDescription());
 
+        // load the detail fragment
         if (savedInstanceState == null) {
             StepDetailFragment fragment = new StepDetailFragment();
             getSupportFragmentManager().beginTransaction()

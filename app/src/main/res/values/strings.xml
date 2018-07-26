@@ -6,4 +6,8 @@
     <string name="dummy">xxx</string>
     <string name="previous">previous</string>
     <string name="next">next</string>
+    <string name="try_again">try again</string>
+
+    <!-- errors -->
+    <string name="no_internet">Something went wrong, please check your internet connection and try again!</string>
 </resources>

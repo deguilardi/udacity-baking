@@ -3,6 +3,7 @@ package com.guilardi.baking;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesA
     public void onBindViewHolder(@NonNull RecipesAdapterViewHolder recipesAdapterViewHolder, int position) {
         Recipe recipe = mData.get(position);
         recipesAdapterViewHolder.mName.setText(recipe.getName());
-        if(!recipe.getImage().equals("")) {
+        if(!TextUtils.isEmpty(recipe.getImage())) {
             Picasso.with(mContext).load(recipe.getImage())
                     .centerCrop()
                     .placeholder(R.drawable.progress_animation)
