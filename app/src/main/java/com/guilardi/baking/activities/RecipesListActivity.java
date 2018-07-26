@@ -1,7 +1,10 @@
 package com.guilardi.baking.activities;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,8 +23,10 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import com.google.gson.Gson;
+import com.guilardi.baking.MyWidgetProvider;
 import com.guilardi.baking.RecipesAdapter;
-import com.guilardi.baking.custom.MyActivity;
+import com.guilardi.baking.MyActivity;
 import com.guilardi.baking.data.Recipe;
 import com.guilardi.baking.utilities.ExoPlayerVideoHandler;
 import com.guilardi.baking.utilities.Helper;
@@ -157,10 +162,27 @@ public class RecipesListActivity extends MyActivity implements RecipesAdapter.Re
             return;
         }
         mHasSelection = true;
+        Recipe selectedRecipe = mRecipesAdapter.getData().get(position);
 
         Intent detailsActivityIntent = new Intent(RecipesListActivity.this, StepsListActivity.class);
-        detailsActivityIntent.putExtra(StepsListActivity.ARG_RECIPE, mRecipesAdapter.getData().get(position));
+        detailsActivityIntent.putExtra(StepsListActivity.ARG_RECIPE, selectedRecipe);
         startActivity(detailsActivityIntent);
+
+        // save the selected recipe to show on widgets
+        SharedPreferences prefs = getSharedPreferences(MyWidgetProvider.KEY_PREFERENCES, MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = prefs.edit();
+        Gson recipeGson = new Gson();
+        String recipeJson = recipeGson.toJson(selectedRecipe);
+        prefsEditor.putString(MyWidgetProvider.ARG_RECIPE,recipeJson);
+        prefsEditor.apply();
+
+        // update widgets immediatly
+        Intent intent = new Intent(this, MyWidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        ComponentName component = new ComponentName(getApplication(), MyWidgetProvider.class);
+        int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(component);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        sendBroadcast(intent);
     }
 
 }

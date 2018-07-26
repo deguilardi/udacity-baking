@@ -13,7 +13,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import com.guilardi.baking.custom.MyActivity;
+import com.guilardi.baking.MyActivity;
 import com.guilardi.baking.custom.NonScrollListView;
 import com.guilardi.baking.data.Recipe;
 

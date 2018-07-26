@@ -1,4 +1,4 @@
-package com.guilardi.baking.custom;
+package com.guilardi.baking;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -48,8 +48,7 @@ public abstract class MyActivity extends AppCompatActivity {
 
     public void setCurrentStepPosition(int currentStepPosition){
         mCurrentStepPosition = currentStepPosition;
-        Recipe.Step currentStep = mCurrentRecipe.getSteps().get(mCurrentStepPosition);
-        mCurrentStep = currentStep;
+        mCurrentStep = mCurrentRecipe.getSteps().get(mCurrentStepPosition);
     }
 
     @Override

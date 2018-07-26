@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.ui.PlayerView;
-import com.guilardi.baking.custom.MyActivity;
 import com.guilardi.baking.data.Recipe;
 import com.guilardi.baking.utilities.ExoPlayerVideoHandler;
 import com.guilardi.baking.utilities.Helper;

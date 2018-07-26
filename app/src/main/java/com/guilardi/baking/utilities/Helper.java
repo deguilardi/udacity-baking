@@ -11,7 +11,7 @@ import com.guilardi.baking.R;
 import com.guilardi.baking.StepDetailFragment;
 import com.guilardi.baking.activities.FullscreenVideoActivity;
 import com.guilardi.baking.activities.StepDetailActivity;
-import com.guilardi.baking.custom.MyActivity;
+import com.guilardi.baking.MyActivity;
 import com.guilardi.baking.data.Recipe;
 
 /**

@@ -6,7 +6,7 @@ import android.view.MenuItem;
 
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.guilardi.baking.R;
-import com.guilardi.baking.custom.MyActivity;
+import com.guilardi.baking.MyActivity;
 import com.guilardi.baking.data.Recipe;
 import com.guilardi.baking.utilities.ExoPlayerVideoHandler;
 import com.guilardi.baking.utilities.Helper;

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Baking</string>
     <string name="title_recipe_detail">Recipe Detail</string>
+    <string name="widget_title">Ingredients List</string>
 
     <!-- UI -->
     <string name="dummy">xxx</string>
@@ -10,4 +11,5 @@
 
     <!-- errors -->
     <string name="no_internet">Something went wrong, please check your internet connection and try again!</string>
+    <string name="widget_default_message">Choose a recipe in the app\nIt\'s ingredients list will be shown here</string>
 </resources>
