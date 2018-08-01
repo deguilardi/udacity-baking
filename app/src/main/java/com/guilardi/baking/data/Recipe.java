@@ -19,6 +19,14 @@ public class Recipe implements Parcelable {
     private Integer servings;
     private String image;
 
+    public Recipe(Integer id, String name, Integer servings, String image, List<Ingredient> ingredients, List<Step> steps){
+        this.id = id;
+        this.name = name;
+        this.servings = servings;
+        this.ingredients = ingredients;
+        this.steps = steps;
+    }
+
     protected Recipe(Parcel in) {
         if (in.readByte() == 0) {
             id = null;
@@ -117,6 +125,12 @@ public class Recipe implements Parcelable {
         private String measure;
         private String ingredient;
 
+        public Ingredient(Float quantity, String measure, String ingredient){
+            this.quantity = quantity;
+            this.measure = measure;
+            this.ingredient = ingredient;
+        }
+
         protected Ingredient(Parcel in) {
             if (in.readByte() == 0) {
                 quantity = null;
@@ -191,6 +205,11 @@ public class Recipe implements Parcelable {
         private String description;
         private String videoURL;
         private String thumbnailURL;
+
+        public Step(String shortDescription, String description){
+            this.shortDescription = shortDescription;
+            this.description = description;
+        }
 
         protected Step(Parcel in) {
             if (in.readByte() == 0) {

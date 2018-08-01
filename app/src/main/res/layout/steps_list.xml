@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="Ingredients:"
+        android:text="@string/ingredients_label"
         android:textSize="16sp"
         android:textStyle="bold"/>
 
@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="Steps:"
+        android:text="@string/steps_label"
         android:textSize="16sp"
         android:textStyle="bold"/>
 

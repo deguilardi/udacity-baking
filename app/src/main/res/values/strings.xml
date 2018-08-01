@@ -8,6 +8,8 @@
     <string name="previous">previous</string>
     <string name="next">next</string>
     <string name="try_again">try again</string>
+    <string name="ingredients_label">Ingredients:</string>
+    <string name="steps_label">Steps:</string>
 
     <!-- errors -->
     <string name="no_internet">Something went wrong, please check your internet connection and try again!</string>
